@@ -17,7 +17,7 @@ public class ElasticSearchClient {
     private final static String CLUSTER_NAME = "sodyu_cluster";
     private final static String TRANSPORT_SNIFF = "client.transport.sniff";
     private volatile static TransportClient client = null;
-    private static String[] ips = {"192.168.197.131", "192.168.197.132", "192.168.197.133"};
+    private static String[] ips = { "192.168.197.132"};
     public static TransportClient getElasticClient() {
         if (null == client) {
             synchronized (ElasticSearchClient.class) {
