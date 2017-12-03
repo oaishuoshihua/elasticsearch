@@ -1,4 +1,4 @@
-package com.sodyu.elasticsearch.indextype;
+package com.sodyu.elasticsearch.indexmodel;
 
 /**
  * Created by yuhp on 2017/10/9.

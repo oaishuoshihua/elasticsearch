@@ -24,6 +24,7 @@ import java.util.Map;
  */
 public class IndexCreate {
     private static Logger logger = LoggerFactory.getLogger(IndexCreate.class);
+
     private static boolean createMapping(Class indexClass) {
         boolean result = false;
         if (null == indexClass) {
@@ -37,12 +38,12 @@ public class IndexCreate {
         }
         try {
 
-            logger.info("创建索引{}mapping",mappingModel.getIndexName());
+            logger.info("创建索引{}mapping", mappingModel.getIndexName());
             PutMappingRequest mappingRequest = getMapping(mappingModel);
-            ActionFuture<PutMappingResponse> response= ElasticSearchClient.indices().putMapping(mappingRequest);
+            ActionFuture<PutMappingResponse> response = ElasticSearchClient.indices().putMapping(mappingRequest);
             if (response.actionGet().isAcknowledged()) {
                 result = true;
-                logger.info("创建索引{}mapping成功",mappingModel.getIndexName());
+                logger.info("创建索引{}mapping成功", mappingModel.getIndexName());
             } else {
                 result = false;
                 logger.info("创建索引{}mapping失败", mappingModel.getIndexName());
@@ -67,8 +68,8 @@ public class IndexCreate {
                 builder.startObject(info.getName())
                         .field("type", StringUtils.lowerCase(info.getType()))
                         .field("store", info.isStore() ? "yes" : "no");
-                if(IndexFieldType.Text.getDataType().equalsIgnoreCase(info.getType())||IndexFieldType.String.getDataType().equalsIgnoreCase(info.getType())) {
-                    builder.startObject("fields").startObject("keyword").field("type","keyword").field("ignore_above",256).endObject().endObject();
+                if (IndexFieldType.Text.getDataType().equalsIgnoreCase(info.getType()) || IndexFieldType.String.getDataType().equalsIgnoreCase(info.getType())) {
+                    builder.startObject("fields").startObject("keyword").field("type", "keyword").field("ignore_above", 256).endObject().endObject();
                 }
                 builder.endObject();
 
@@ -78,13 +79,13 @@ public class IndexCreate {
         builder.endObject()
                 .endObject()
                 .endObject();
-        PutMappingRequest mappingRequest= Requests.putMappingRequest(mappingModel.getIndexName()).type(mappingModel.getIndexType()).source(builder);
+        PutMappingRequest mappingRequest = Requests.putMappingRequest(mappingModel.getIndexName()).type(mappingModel.getIndexType()).source(builder);
         return mappingRequest;
     }
 
 
-    private static boolean createIndex(Class indexClass){
-        boolean result=false;
+    private static boolean createIndex(Class indexClass) {
+        boolean result = false;
         if (null == indexClass) {
             logger.error("索引class为空");
             return false;
@@ -94,9 +95,10 @@ public class IndexCreate {
             logger.error("索引名称或类型名称为空{}{}", mappingModel.getIndexIdName(), mappingModel.getIndexType());
             return result;
         }
+        XContentBuilder builder = null;
         try {
-            logger.info("创建索引{}",mappingModel.getIndexName());
-            XContentBuilder builder = XContentFactory.jsonBuilder()
+            logger.info("创建索引{}", mappingModel.getIndexName());
+            builder = XContentFactory.jsonBuilder()
                     .startObject()
                     .field("number_of_shards", 4)//设置分片数量
                     .field("number_of_replicas", 1)//设置副本数量
@@ -109,14 +111,18 @@ public class IndexCreate {
             CreateIndexResponse response = cirb.execute().actionGet();
             if (response.isAcknowledged()) {
                 result = true;
-                logger.info("创建索引{}成功",mappingModel.getIndexName());
+                logger.info("创建索引{}成功", mappingModel.getIndexName());
             } else {
                 result = false;
-                logger.info("创建索引{}失败",mappingModel.getIndexName());
+                logger.info("创建索引{}失败", mappingModel.getIndexName());
 
             }
         } catch (Exception e) {
-            logger.info("创建索引{}失败", mappingModel.getIndexName(),e);
+            logger.info("创建索引{}失败", mappingModel.getIndexName(), e);
+        } finally {
+            if (builder != null) {
+                builder.close();
+            }
         }
 
         return result;

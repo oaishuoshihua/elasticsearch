@@ -1,4 +1,4 @@
-package com.sodyu.elasticsearch.datatoes;
+package com.sodyu.elasticsearch.service;
 
 /**
  * Created by yuhp on 2017/10/10.

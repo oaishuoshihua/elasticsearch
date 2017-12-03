@@ -1,25 +1,15 @@
 package com.sodyu.elasticsearch.dal.dao;
 
-import static org.apache.ibatis.jdbc.SqlBuilder.BEGIN;
-import static org.apache.ibatis.jdbc.SqlBuilder.DELETE_FROM;
-import static org.apache.ibatis.jdbc.SqlBuilder.FROM;
-import static org.apache.ibatis.jdbc.SqlBuilder.INSERT_INTO;
-import static org.apache.ibatis.jdbc.SqlBuilder.ORDER_BY;
-import static org.apache.ibatis.jdbc.SqlBuilder.SELECT;
-import static org.apache.ibatis.jdbc.SqlBuilder.SELECT_DISTINCT;
-import static org.apache.ibatis.jdbc.SqlBuilder.SET;
-import static org.apache.ibatis.jdbc.SqlBuilder.SQL;
-import static org.apache.ibatis.jdbc.SqlBuilder.UPDATE;
-import static org.apache.ibatis.jdbc.SqlBuilder.VALUES;
-import static org.apache.ibatis.jdbc.SqlBuilder.WHERE;
-
 import com.sodyu.elasticsearch.dal.entity.Dianpu;
+import com.sodyu.elasticsearch.dal.entity.DianpuExample;
 import com.sodyu.elasticsearch.dal.entity.DianpuExample.Criteria;
 import com.sodyu.elasticsearch.dal.entity.DianpuExample.Criterion;
-import com.sodyu.elasticsearch.dal.entity.DianpuExample;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.ibatis.jdbc.SqlBuilder.*;
 public class DianpuSqlProvider {
 
     /**
@@ -58,87 +48,87 @@ public class DianpuSqlProvider {
     public String insertSelective(Dianpu record) {
         BEGIN();
         INSERT_INTO("dianpu");
-        
+
         if (record.getId() != null) {
             VALUES("id", "#{id,jdbcType=BIGINT}");
         }
-        
+
         if (record.getUid() != null) {
             VALUES("uid", "#{uid,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopId() != null) {
             VALUES("shopId", "#{shopId,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopName() != null) {
             VALUES("shopName", "#{shopName,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getSaleCount() != null) {
             VALUES("saleCount", "#{saleCount,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getProductCount() != null) {
             VALUES("productCount", "#{productCount,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopUrl() != null) {
             VALUES("shopUrl", "#{shopUrl,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopRealUrl() != null) {
             VALUES("shopRealUrl", "#{shopRealUrl,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getGoodratePercent() != null) {
             VALUES("goodratePercent", "#{goodratePercent,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getMainAuction() != null) {
             VALUES("mainAuction", "#{mainAuction,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getLocation() != null) {
             VALUES("location", "#{location,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getTelephone() != null) {
             VALUES("telephone", "#{telephone,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getType() != null) {
             VALUES("type", "#{type,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getCategory() != null) {
             VALUES("category", "#{category,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDestination() != null) {
             VALUES("destination", "#{destination,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getAllkeys() != null) {
             VALUES("allkeys", "#{allkeys,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_CreateUser() != null) {
             VALUES("DataChange_CreateUser", "#{dataChange_CreateUser,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_CreateTime() != null) {
             VALUES("DataChange_CreateTime", "#{dataChange_CreateTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getDataChange_LastUser() != null) {
             VALUES("DataChange_LastUser", "#{dataChange_LastUser,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_LastTime() != null) {
             VALUES("DataChange_LastTime", "#{dataChange_LastTime,jdbcType=TIMESTAMP}");
         }
-        
+
         return SQL();
     }
 
@@ -176,12 +166,18 @@ public class DianpuSqlProvider {
         SELECT("DataChange_LastTime");
         FROM("dianpu");
         applyWhere(example, false);
-        
+
         if (example != null && example.getOrderByClause() != null) {
             ORDER_BY(example.getOrderByClause());
         }
-        
-        return SQL();
+        StringBuilder sql = new StringBuilder(SQL());
+
+        if (example.getPage() > -1 && example.getPageSize() > -1) {
+            sql.append(" limit ").append(example.getPage()).append(" , ").append(example.getPageSize());
+        } else if (example.getPageSize() > -1) {
+            sql.append(" limit ").append(example.getPageSize());
+        }
+        return sql.toString();
     }
 
     /**
@@ -193,90 +189,90 @@ public class DianpuSqlProvider {
     public String updateByExampleSelective(Map<String, Object> parameter) {
         Dianpu record = (Dianpu) parameter.get("record");
         DianpuExample example = (DianpuExample) parameter.get("example");
-        
+
         BEGIN();
         UPDATE("dianpu");
-        
+
         if (record.getId() != null) {
             SET("id = #{record.id,jdbcType=BIGINT}");
         }
-        
+
         if (record.getUid() != null) {
             SET("uid = #{record.uid,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopId() != null) {
             SET("shopId = #{record.shopId,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopName() != null) {
             SET("shopName = #{record.shopName,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getSaleCount() != null) {
             SET("saleCount = #{record.saleCount,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getProductCount() != null) {
             SET("productCount = #{record.productCount,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopUrl() != null) {
             SET("shopUrl = #{record.shopUrl,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopRealUrl() != null) {
             SET("shopRealUrl = #{record.shopRealUrl,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getGoodratePercent() != null) {
             SET("goodratePercent = #{record.goodratePercent,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getMainAuction() != null) {
             SET("mainAuction = #{record.mainAuction,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getLocation() != null) {
             SET("location = #{record.location,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getTelephone() != null) {
             SET("telephone = #{record.telephone,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getType() != null) {
             SET("type = #{record.type,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getCategory() != null) {
             SET("category = #{record.category,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDestination() != null) {
             SET("destination = #{record.destination,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getAllkeys() != null) {
             SET("allkeys = #{record.allkeys,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_CreateUser() != null) {
             SET("DataChange_CreateUser = #{record.dataChange_CreateUser,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_CreateTime() != null) {
             SET("DataChange_CreateTime = #{record.dataChange_CreateTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getDataChange_LastUser() != null) {
             SET("DataChange_LastUser = #{record.dataChange_LastUser,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_LastTime() != null) {
             SET("DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP}");
         }
-        
+
         applyWhere(example, true);
         return SQL();
     }
@@ -290,7 +286,7 @@ public class DianpuSqlProvider {
     public String updateByExample(Map<String, Object> parameter) {
         BEGIN();
         UPDATE("dianpu");
-        
+
         SET("id = #{record.id,jdbcType=BIGINT}");
         SET("uid = #{record.uid,jdbcType=VARCHAR}");
         SET("shopId = #{record.shopId,jdbcType=VARCHAR}");
@@ -311,7 +307,7 @@ public class DianpuSqlProvider {
         SET("DataChange_CreateTime = #{record.dataChange_CreateTime,jdbcType=TIMESTAMP}");
         SET("DataChange_LastUser = #{record.dataChange_LastUser,jdbcType=VARCHAR}");
         SET("DataChange_LastTime = #{record.dataChange_LastTime,jdbcType=TIMESTAMP}");
-        
+
         DianpuExample example = (DianpuExample) parameter.get("example");
         applyWhere(example, true);
         return SQL();
@@ -326,85 +322,85 @@ public class DianpuSqlProvider {
     public String updateByPrimaryKeySelective(Dianpu record) {
         BEGIN();
         UPDATE("dianpu");
-        
+
         if (record.getUid() != null) {
             SET("uid = #{uid,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopId() != null) {
             SET("shopId = #{shopId,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopName() != null) {
             SET("shopName = #{shopName,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getSaleCount() != null) {
             SET("saleCount = #{saleCount,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getProductCount() != null) {
             SET("productCount = #{productCount,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopUrl() != null) {
             SET("shopUrl = #{shopUrl,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getShopRealUrl() != null) {
             SET("shopRealUrl = #{shopRealUrl,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getGoodratePercent() != null) {
             SET("goodratePercent = #{goodratePercent,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getMainAuction() != null) {
             SET("mainAuction = #{mainAuction,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getLocation() != null) {
             SET("location = #{location,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getTelephone() != null) {
             SET("telephone = #{telephone,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getType() != null) {
             SET("type = #{type,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getCategory() != null) {
             SET("category = #{category,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDestination() != null) {
             SET("destination = #{destination,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getAllkeys() != null) {
             SET("allkeys = #{allkeys,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_CreateUser() != null) {
             SET("DataChange_CreateUser = #{dataChange_CreateUser,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_CreateTime() != null) {
             SET("DataChange_CreateTime = #{dataChange_CreateTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getDataChange_LastUser() != null) {
             SET("DataChange_LastUser = #{dataChange_LastUser,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDataChange_LastTime() != null) {
             SET("DataChange_LastTime = #{dataChange_LastTime,jdbcType=TIMESTAMP}");
         }
-        
+
         WHERE("id = #{id,jdbcType=BIGINT}");
-        
+
         return SQL();
     }
 
@@ -418,7 +414,7 @@ public class DianpuSqlProvider {
         if (example == null) {
             return;
         }
-        
+
         String parmPhrase1;
         String parmPhrase1_th;
         String parmPhrase2;
@@ -440,7 +436,7 @@ public class DianpuSqlProvider {
             parmPhrase3 = "#{oredCriteria[%d].allCriteria[%d].value[%d]}";
             parmPhrase3_th = "#{oredCriteria[%d].allCriteria[%d].value[%d],typeHandler=%s}";
         }
-        
+
         StringBuilder sb = new StringBuilder();
         List<Criteria> oredCriteria = example.getOredCriteria();
         boolean firstCriteria = true;
@@ -452,7 +448,7 @@ public class DianpuSqlProvider {
                 } else {
                     sb.append(" or ");
                 }
-                
+
                 sb.append('(');
                 List<Criterion> criterions = criteria.getAllCriteria();
                 boolean firstCriterion = true;
@@ -463,14 +459,14 @@ public class DianpuSqlProvider {
                     } else {
                         sb.append(" and ");
                     }
-                    
+
                     if (criterion.isNoValue()) {
                         sb.append(criterion.getCondition());
                     } else if (criterion.isSingleValue()) {
                         if (criterion.getTypeHandler() == null) {
                             sb.append(String.format(parmPhrase1, criterion.getCondition(), i, j));
                         } else {
-                            sb.append(String.format(parmPhrase1_th, criterion.getCondition(), i, j,criterion.getTypeHandler()));
+                            sb.append(String.format(parmPhrase1_th, criterion.getCondition(), i, j, criterion.getTypeHandler()));
                         }
                     } else if (criterion.isBetweenValue()) {
                         if (criterion.getTypeHandler() == null) {
@@ -501,7 +497,7 @@ public class DianpuSqlProvider {
                 sb.append(')');
             }
         }
-        
+
         if (sb.length() > 0) {
             WHERE(sb.toString());
         }
